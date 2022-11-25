@@ -71,24 +71,25 @@ def shiftOut(order, val):
 
 
 def write(message):
-    message_array = []
+    message_array = data[" "]
 
-    for letter in upper(message):
-        message_array + data[letter]
+    for letter in message.upper():
+        message_array += data[letter]
 
-    for i in range(0, len(message_array)-8):  # len(data) total number of "0-F" columns
+    print(message_array)
+
+    for k in range(0, len(message_array)-8):  # len(data) total number of "0-F" columns
         # times of repeated displaying LEDMatrix in every frame, the bigger the "j", the longer the display time.
         for j in range(0, 20):
             x = 0x80      # Set the column information to start from the first column
-            for i in range(i, i+8):
+            for i in range(k, k+8):
                 latchPin.off()
-                shiftOut(MSBFIRST, data[i])
+                shiftOut(MSBFIRST, message_array[i])
                 shiftOut(MSBFIRST, ~x)
                 latchPin.on()
                 time.sleep(0.001)
                 x >>= 1
 
 
-if __name__ == '__main__':  # Program entrance
-    print('Program is starting...')
-    write("neco arc")
+if __name__ == '__main__':
+    pass
