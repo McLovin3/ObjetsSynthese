@@ -34,4 +34,4 @@ def root():
         form.message.data = ""
         write(message)
 
-    return render_template("root.html", form=form)
+    return render_template("root.html", form=form, temperature=temperature, humidity=humidity)

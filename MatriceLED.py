@@ -75,10 +75,10 @@ def write(message):
 
     for letter in message.upper():
         message_array += data[letter].copy()
-    
-    for k in range(0, len(message_array)-8): 
+
+    for k in range(0, len(message_array)-8):
         for j in range(0, 20):
-            x = 0x80 
+            x = 0x80
             for i in range(k, k+8):
                 latchPin.off()
                 shiftOut(MSBFIRST, message_array[i])
@@ -86,6 +86,7 @@ def write(message):
                 latchPin.on()
                 time.sleep(0.001)
                 x >>= 1
-    
+
+
 if __name__ == '__main__':
     pass
