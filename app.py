@@ -34,7 +34,9 @@ def get_sensor_info():
 
 @ app.route("/", methods=["GET", "POST"])
 def root():
+    # If method is get
     get_sensor_info()
+
     form = MessageForm()
     if form.validate_on_submit():
         message = form.message.data
