@@ -15,22 +15,29 @@ class MessageForm(FlaskForm):
                          "class": "btn btn-secondary"})
 
 
-try:
-    dht = DHT.DHT(4)
+temperature = 0
+humidity = 0
 
-    verification = dht.readDHT11()
-    if (verification is dht.DHTLIB_OK):
-        temperature = dht.temperature
-        humidity = dht.humidity
-except:
-    temperature = humidity = "No sensor"
+
+def get_sensor_info():
+    global temperature, humidity
+    try:
+        dht = DHT.DHT(4)
+
+        verification = dht.readDHT11()
+        if (verification is dht.DHTLIB_OK):
+            temperature = dht.temperature
+            humidity = dht.humidity
+    except:
+        temperature = humidity = "No sensor"
 
 
 @ app.route("/", methods=["GET", "POST"])
 def root():
+    get_sensor_info()
     form = MessageForm()
     if form.validate_on_submit():
-        message = form.message.data 
+        message = form.message.data
         form.message.data = ""
         write(message)
 
