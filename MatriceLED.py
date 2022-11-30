@@ -74,6 +74,9 @@ def write(message):
     message_array = data[" "].copy()
 
     for letter in message.upper():
+        if letter not in data:
+            return
+
         message_array += data[letter].copy()
 
     for k in range(0, len(message_array)-8):

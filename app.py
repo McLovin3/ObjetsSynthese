@@ -20,12 +20,7 @@ class MessageForm(FlaskForm):
                          "class": "btn btn-secondary"})
 
 
-try:
-    distance_sensor = DistanceSensor(echo=19, trigger=26)
-    distance = distance_sensor.distance
-except:
-    distance = "No sensor"
-
+distance_sensor = DistanceSensor(echo=19, trigger=26)
 temperature = 0
 humidity = 0
 
@@ -62,4 +57,4 @@ def root():
                            temperature=temperature,
                            humidity=humidity,
                            image_time=image_time,
-                           distance=int(distance * 100))
+                           distance=int(distance_sensor.distance * 100))
