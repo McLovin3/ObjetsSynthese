@@ -24,14 +24,15 @@
                             <p class="fw-bold">Date et heure</p>
                         </div>
                         <div class="border col d-flex align-items-center justify-content-center">
-                            {{ image_time }}
+                            {{ time }}
                         </div>
                     </div>
                     <div class="row h-25">
                         <div class="border col d-flex align-items-center justify-content-center">
                             <p class="fw-bold">Catégorie</p>
                         </div>
-                        <div class="border col"></div>
+                        <div class="border col">
+                        </div>
                     </div>
                     <div class="row h-25">
                         <div class="border col d-flex align-items-center justify-content-center">
@@ -49,12 +50,13 @@
                     </div>
                 </div>
                 <div class="border col-6 text-center">
-                    <img src="{{url_for('static', filename='image.png')}}" style="width: auto; height: 100%"
+                    <img src="{{url_for('static', filename='image.jpg')}}" style="width: auto; height: 100%"
                         class="img-fluid" alt="Last Photo">
                 </div>
                 <div class="border col-2 d-flex align-items-center justify-content-center">
-                    <button class="btn btn-secondary" type="button" onClick="window.location.reload();">Rafraîchir la
-                        page</button>
+                    <form action="/photo" method="post">
+                        <button type="submit">Prendre une photo</button>
+                    </form>
                 </div>
             </div>
 
@@ -82,11 +84,14 @@
                     <div class="border col-2 d-flex align-items-center justify-content-center">
                         <p class="fw-bold">Message</p>
                     </div>
-                    <div class="border col-8 d-flex align-items-center justify-content-center">
+                    <div class="border col-8 d-flex align-items-center justify-content-evenly">
                         {{ form.message }}
+                        {{ form.submit }}
                     </div>
                     <div class="border col-2 d-flex align-items-center justify-content-center">
-                        {{ form.submit }}
+                        <button class="btn btn-secondary" type="button" onClick="window.location.reload();">
+                            Rafraîchir la page
+                        </button>
                     </div>
                 </form>
             </div>

@@ -2,16 +2,19 @@ from flask import Flask, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
-from gpiozero import DistanceSensor, DistanceSensorNoEcho
+from gpiozero import DistanceSensor
+from datetime import datetime
 from MatriceLED import write
-import os
-import time
-
+import cv2
 import packages.Freenove_DHT11 as DHT
+
+capture = cv2.VideoCapture(0)
+
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "McLovin"
 
-IMAGE_PATH = "./static/image.png"
+IMAGE_PATH = "./static/image.jpg"
 
 
 class MessageForm(FlaskForm):
@@ -37,14 +40,17 @@ def get_sensor_info():
     except:
         temperature = humidity = "No sensor"
 
+@app.route("/photo", methods=["POST"])
+def photo():
+    _, img = capture.read()
+    cv2.imwrite(IMAGE_PATH, img)
+    return root()
+
 
 @ app.route("/", methods=["GET", "POST"])
 def root():
     # If method is get
     get_sensor_info()
-
-    image_time = os.path.getctime(IMAGE_PATH)
-    image_time = time.ctime(image_time)
 
     form = MessageForm()
     if form.validate_on_submit():
@@ -56,5 +62,5 @@ def root():
                            form=form,
                            temperature=temperature,
                            humidity=humidity,
-                           image_time=image_time,
+                           time=str(datetime.now()).split(".")[0],
                            distance=int(distance_sensor.distance * 100))
