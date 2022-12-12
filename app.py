@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from sms_service import send_sms
 from wtforms.validators import DataRequired
-from TensorFlow.model import predict
+from TensorFlow.model import predict_image
 from gpiozero import DistanceSensor
 from datetime import datetime
 from MatriceLED import write
@@ -64,13 +64,12 @@ def root():
 
     prediction = "Aucune prédiction"
     if image_path != "":
-        prediction = predict(image_path).prediction
+        prediction = predict_image(image_path).prediction
 
     sms_time = ""
     if prediction == "Unmasked":
         sms_time = str(datetime.now()).split(".")[0]
         send_sms("Visage non masqué", sms_time)
-
 
     if distance_sensor.distance < 0.05:
         sms_time = str(datetime.now()).split(".")[0]

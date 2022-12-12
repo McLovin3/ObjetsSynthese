@@ -10,11 +10,13 @@ def send_sms(reason, time):
     try:
         corps = reason + " - " + time
         leCourriel = """\
-        From: %s
-        To: %s
-        Subject: %s
-        %s
-        """ % (de, vers, sujet, corps)
+From: %s
+To: %s
+Subject: %s
+
+%s
+""" % (de, vers, sujet, corps)
+        print(leCourriel)
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.ehlo()
         server.login(gmail_utilisateur, gmail_app_motPasse)
