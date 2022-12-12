@@ -89,7 +89,3 @@ def write(message):
                 latchPin.on()
                 time.sleep(0.001)
                 x >>= 1
-
-
-if __name__ == '__main__':
-    pass

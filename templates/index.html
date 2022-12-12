@@ -51,8 +51,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="border col-6 text-center">
+                <div class="border col-6 d-flex align-items-center justify-content-center">
+                    {% if image_path == "" %}
+                    <p class="fw-bold">Aucune image</p>
+                    {% else %}
                     <img src={{image_path}} style="width: auto; height: 100%" class="img-fluid" alt="Last Photo">
+                    {% endif %}
                 </div>
                 <div class="border col-2 d-flex align-items-center justify-content-center">
                     <form action="/photo" method="post">
