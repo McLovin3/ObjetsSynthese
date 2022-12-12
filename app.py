@@ -1,7 +1,9 @@
 from flask import Flask, render_template, redirect
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
+from sms_service import send_sms
 from wtforms.validators import DataRequired
+from TensorFlow.model import predict
 from gpiozero import DistanceSensor
 from datetime import datetime
 from MatriceLED import write
@@ -60,10 +62,26 @@ def root():
         form.message.data = ""
         write(message)
 
-    return render_template("root.html",
+    prediction = "Aucune prédiction"
+    if image_path != "":
+        prediction = predict(image_path).prediction
+
+    sms_time = ""
+    if prediction == "Unmasked":
+        sms_time = str(datetime.now()).split(".")[0]
+        send_sms("Visage non masqué", sms_time)
+
+
+    if distance_sensor.distance < 0.05:
+        sms_time = str(datetime.now()).split(".")[0]
+        send_sms("Objet trop près", sms_time)
+
+    return render_template("index.html",
                            form=form,
                            temperature=temperature,
                            humidity=humidity,
+                           sms_time=sms_time,
                            image_path=image_path,
+                           prediction=prediction,
                            time=str(datetime.now()).split(".")[0],
                            distance=int(distance_sensor.distance * 100))
