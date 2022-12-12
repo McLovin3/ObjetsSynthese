@@ -1,9 +1,9 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from sms_service import send_sms
 from wtforms.validators import DataRequired
-from TensorFlow.model import predict_image
+from model import predict_image
 from gpiozero import DistanceSensor
 from datetime import datetime
 from MatriceLED import write
@@ -23,6 +23,8 @@ class MessageForm(FlaskForm):
 distance_sensor = DistanceSensor(echo=19, trigger=26)
 temperature = 0
 humidity = 0
+sms_time = ""
+prediction = "Aucune prédiction"
 
 
 def get_sensor_info():
@@ -43,35 +45,33 @@ image_path = ""
 
 @app.route("/photo", methods=["POST"])
 def photo():
-    global image_path
+    global image_path, prediction, sms_time
     capture = cv2.VideoCapture(0)
     _, img = capture.read()
     image_path = "./static/" + datetime.now().strftime("%s") + ".jpg"
     cv2.imwrite(image_path, img)
+
+    prediction = predict_image(image_path).prediction
+    if prediction == "Unmasked":
+        sms_time = str(datetime.now()).split(".")[0]
+        send_sms("Visage non masqué", sms_time)
+
     return redirect("/")
 
 
 @ app.route("/", methods=["GET", "POST"])
 def root():
-    # If method is get
-    get_sensor_info()
+    global sms_time
 
     form = MessageForm()
-    if form.validate_on_submit():
+    if request.method == "POST" and form.validate_on_submit():
         message = form.message.data
         form.message.data = ""
         write(message)
 
-    prediction = "Aucune prédiction"
-    if image_path != "":
-        prediction = predict_image(image_path).prediction
-
-    sms_time = ""
-    if prediction == "Unmasked":
-        sms_time = str(datetime.now()).split(".")[0]
-        send_sms("Visage non masqué", sms_time)
-
-    if distance_sensor.distance < 0.05:
+    get_sensor_info()
+    distance = distance_sensor.distance
+    if distance < 0.05:
         sms_time = str(datetime.now()).split(".")[0]
         send_sms("Objet trop près", sms_time)
 
@@ -83,4 +83,4 @@ def root():
                            image_path=image_path,
                            prediction=prediction,
                            time=str(datetime.now()).split(".")[0],
-                           distance=int(distance_sensor.distance * 100))
+                           distance=int(distance * 100))
