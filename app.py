@@ -25,7 +25,7 @@ temperature = 0
 humidity = 0
 image_path = ""
 sms_time = ""
-prediction = "Aucune prédiction"
+prediction = ""
 
 
 def send_sms(reason):

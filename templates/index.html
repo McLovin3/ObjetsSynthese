@@ -31,7 +31,11 @@
                             <p class="fw-bold">Catégorie</p>
                         </div>
                         <div class="border col d-flex align-items-center justify-content-center">
-                            {{ prediction }}
+                            {% if prediction == "" %}
+                            <p>Aucune prédiction</p>
+                            {% else %}
+                            <p>{{ prediction }}</p>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="row h-25">
