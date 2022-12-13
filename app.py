@@ -16,7 +16,7 @@ app.config['SECRET_KEY'] = "McLovin"
 
 class MessageForm(FlaskForm):
     message = StringField("Message", [DataRequired()])
-    submit = SubmitField("Envoyer le message", render_kw={
+    submit = SubmitField("Afficher sur la matrice", render_kw={
                          "class": "btn btn-secondary"})
 
 
