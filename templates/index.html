@@ -47,13 +47,17 @@
                             <p class="fw-bold">SMS</p>
                         </div>
                         <div class="border col d-flex align-items-center justify-content-center">
-                            {{ sms_time }}
+                            {% if sms_time == "" %}
+                            <p>Aucun SMS</p>
+                            {% else %}
+                            <p>{{ sms_time }}</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
                 <div class="border col-6 d-flex align-items-center justify-content-center">
                     {% if image_path == "" %}
-                    <p class="fw-bold">Aucune image</p>
+                    <p>Aucune image</p>
                     {% else %}
                     <img src={{image_path}} style="width: auto; height: 100%" class="img-fluid" alt="Last Photo">
                     {% endif %}
